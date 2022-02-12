@@ -13,11 +13,11 @@
 //}
 
 
-public class BaseRaaComponent {
+open class BaseRaaComponent {
 	weak private(set) var entity:RaaEntity?
 	//
 	
-	public func update( withDeltaTime deltaTime: Double ) {}//raaLog("FFFFFFFF")}
+	open func update( withDeltaTime deltaTime: Double ) {}//raaLog("FFFFFFFF")}
 	
 	init(forEntity:RaaEntity) {
 		self.entity = forEntity
