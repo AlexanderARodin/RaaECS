@@ -1,3 +1,3 @@
 # RaaECS
 
-A description of this package.
+Personal vesion of Entity-Component System.
