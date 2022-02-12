@@ -48,4 +48,15 @@ extension RaaEntity {
 	}
 }
 
+public extension RaaEntity {
+	func findComponent<ComponentType>( withType: ComponentType.Type ) -> BaseRaaComponent? {
+		for component in components {
+			if component is ComponentType {
+				return component
+			}
+		}
+		return nil
+	}
+}
+
 
