@@ -50,11 +50,12 @@ public class RaaEntityPopulation {
 }
 
 
-@resultBuilder struct ComponentSequence {
-	public static func buildBlock(_ components: BaseRaaComponent...) -> [BaseRaaComponent] {
+@resultBuilder
+public struct ComponentSequence {
+	static func buildBlock(_ components: BaseRaaComponent...) -> [BaseRaaComponent] {
 		return components
 	}
-	public static func buildBlock() -> [BaseRaaComponent] {
+	static func buildBlock() -> [BaseRaaComponent] {
 		return []
 	}
 }
