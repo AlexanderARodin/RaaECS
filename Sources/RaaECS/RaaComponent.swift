@@ -14,7 +14,7 @@
 
 
 open class BaseRaaComponent {
-	weak private(set) var entity:RaaEntity?
+	public private(set) weak var entity:RaaEntity?
 	//
 	
 	open func update( withDeltaTime deltaTime: Double ) {}//raaLog("FFFFFFFF")}
