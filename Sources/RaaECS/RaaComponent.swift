@@ -17,8 +17,10 @@ open class BaseRaaComponent {
 	public private(set) weak var entity:RaaEntity?
 	//
 	
-	open func update( withDeltaTime deltaTime: Double ) {}//raaLog("FFFFFFFF")}
-	
+	open func update( withDeltaTime deltaTime: Double ) {}
+	open func didAddToEntity() {}
+	open func willRemoveFromEntity() {}
+
 	public init(forEntity:RaaEntity) {
 		self.entity = forEntity
 		//raaInitInfo()
