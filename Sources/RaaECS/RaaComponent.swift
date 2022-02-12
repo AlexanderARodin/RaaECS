@@ -19,7 +19,7 @@ open class BaseRaaComponent {
 	
 	open func update( withDeltaTime deltaTime: Double ) {}//raaLog("FFFFFFFF")}
 	
-	init(forEntity:RaaEntity) {
+	public init(forEntity:RaaEntity) {
 		self.entity = forEntity
 		//raaInitInfo()
 	}
