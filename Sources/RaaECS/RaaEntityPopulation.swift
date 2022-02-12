@@ -81,6 +81,7 @@ public extension RaaEntityPopulation {
 			update( withDeltaTime )
 		}
 	}
+	
 	private func getListForUpdating<ComponentType>(forType: ComponentType.Type) -> [(_ seconds:Double)->()] {
 		var result:[(_ seconds:Double)->()] = []
 		for entity in entities {
