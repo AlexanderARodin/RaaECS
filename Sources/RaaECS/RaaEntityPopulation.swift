@@ -32,12 +32,12 @@ public class RaaEntityPopulation {
 			return true
 		}
 	}
-	func removeEmptyEntity() {
+	public func removeEmptyEntity() {
 		entities.removeAll() {entity in
 			entity.components.isEmpty
 		}
 	}
-	func removeEntity(_ anEntity:RaaEntity) {
+	public func removeEntity(_ anEntity:RaaEntity) {
 		entities.removeAll() {entity in
 			if entity === anEntity {
 				entity.removeAllComponents()
