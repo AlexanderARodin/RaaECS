@@ -26,7 +26,7 @@ public class RaaEntityPopulation {
 		//raaDEINITInfo()
 	}
 	
-	func removeAllEntities() {
+	public func removeAllEntities() {
 		entities.removeAll() {entity in
 			entity.removeAllComponents()
 			return true
@@ -50,8 +50,7 @@ public class RaaEntityPopulation {
 }
 
 
-@resultBuilder
-struct ComponentSequence {
+@resultBuilder struct ComponentSequence {
 	static func buildBlock(_ components: BaseRaaComponent...) -> [BaseRaaComponent] {
 		return components
 	}
