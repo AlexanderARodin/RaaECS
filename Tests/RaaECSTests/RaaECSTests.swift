@@ -87,6 +87,7 @@ extension RaaECSTests_2 {
 	
 }
 
+
 public class PseudoComponent: BaseRaaComponent {
 	public override func update( withDeltaTime deltaTime: Double ) {raaLog("kkkkkkkk")}
 }
