@@ -14,7 +14,17 @@
 
 
 public class RaaEntity {
-	public private(set) var components:[BaseRaaComponent] = []
+	public private(set) var components:[BaseRaaComponent] = [] {
+		didSet {
+			notifyComponents()
+		}
+	}
+	
+	private func notifyComponents() {
+		for component in components {
+			component.onComponentListChanged()
+		}
+	}
 	
 	init() {
 		//raaInitInfo()
@@ -32,13 +42,11 @@ extension RaaEntity {
 		func compareObjectTypes(_ a:Any, _ b:Any)->Bool {type(of: a) == type(of: b)}
 		if !components.contains(where: {component in compareObjectTypes(component, newComponent) }) {
 			components.append(newComponent)
-			newComponent.didAddToEntity()
 		}
 	}
 	func removeComponent<ComponentType>( withType: ComponentType.Type ) {
 		components.removeAll() {component in
 			if component is ComponentType {
-				component.willRemoveFromEntity()
 				return true
 			}else{
 				return false
@@ -47,7 +55,6 @@ extension RaaEntity {
 	}
 	func removeAllComponents() {
 		components.removeAll() {component in
-			component.willRemoveFromEntity()
 			return true
 		}
 	}

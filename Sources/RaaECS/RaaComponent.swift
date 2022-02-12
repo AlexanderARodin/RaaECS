@@ -5,6 +5,7 @@
 //  Created by the Dragon on 11.02.2022.
 //
 
+
 //import Foundation
 //	//	//	//	//	//	//	//
 
@@ -18,8 +19,7 @@ open class BaseRaaComponent {
 	//
 	
 	open func update( withDeltaTime deltaTime: Double ) {}
-	open func didAddToEntity() {}
-	open func willRemoveFromEntity() {}
+	open func onComponentListChanged() {}
 
 	public init(forEntity:RaaEntity) {
 		self.entity = forEntity

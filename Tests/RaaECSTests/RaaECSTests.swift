@@ -11,13 +11,21 @@ final class RaaECSTests_2: XCTestCase {
 		population.createEntityFromComponents() {_ in
 		}
 		XCTAssert(population.entities.count == 0, "count not ZERO")
+		raaLog("pre...... 1")
 		population.createEntityFromComponents() {newEntity in
 			BaseRaaComponent(forEntity: RaaEntity())
 		}
+		raaLog("pre...... 2")
 		population.createEntityFromComponents() {newEntity in
 			BaseRaaComponent(forEntity: newEntity)
 		}
-		XCTAssert(population.entities.count == 1, "count not 1 but \(population.entities.count)")
+		raaLog("pre...... 3")
+		population.createEntityFromComponents() {newEntity in
+			BaseRaaComponent(forEntity: newEntity)
+			PseudoComponent(forEntity: newEntity)
+		}
+		raaLog("post...... 3")
+		XCTAssert(population.entities.count == 2, "count not 2 but \(population.entities.count)")
 		raaLog("removeAllEntities...")
 		population.removeAllEntities()
 		XCTAssert(population.entities.count == 0, "count not ZERO")
