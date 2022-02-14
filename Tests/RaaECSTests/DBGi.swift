@@ -16,15 +16,17 @@ extension NSObject: DBGInfo {
 
 
 public protocol DBGInfo {
-	func raaInitInfo()
-	func raaDEINITInfo()
+	func raaInitInfo(_ extTxt: String? )
+	func raaDEINITInfo(_ extTxt: String? )
 }
 public extension DBGInfo {
-	func raaInitInfo() {
-		raaLog( "+ "+String(describing: type(of: self)))
+	func raaInitInfo(_ extTxt: String? = nil ) {
+		let txt:String = (extTxt == nil) ? "" : "\t<\(extTxt ?? "")>"
+		raaLog( "+ "+String(describing: type(of: self)) + txt )
 	}
-	func raaDEINITInfo() {
-		raaLog( "- "+String(describing: type(of: self)))
+	func raaDEINITInfo(_ extTxt: String? = nil ) {
+		let txt:String = (extTxt == nil) ? "" : "\t<\(extTxt ?? "")>"
+		raaLog( "- "+String(describing: type(of: self)) + txt )
 	}
 	var raaClassPrefix: String {
 		"  " + String(describing: type(of: self)) + ":\t"
