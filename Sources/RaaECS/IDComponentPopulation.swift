@@ -186,6 +186,11 @@ open class IDComponent {
 			onChangeID( from: oldValue, to: id)
 		}
 	}
+	open var isValidID: Bool {
+		get {
+			(id ?? 0) > 0
+		}
+	}
 	internal func onChangeID( from oldID: EntityID?, to newID: EntityID? ) {}
 	
 	public init() {
