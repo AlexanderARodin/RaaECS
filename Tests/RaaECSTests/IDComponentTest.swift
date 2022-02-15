@@ -60,6 +60,37 @@ class IDComponentTest: XCTestCase {
 		raaLog("_______________________________")
 	}
 	
+	func testIsChanged() throws {
+		let world = IDComponentPopulation()
+		XCTAssert(world.isChanged == false)
+		
+		world.createEntity() { // 1
+		}
+		XCTAssert(world.isChanged == false)
+
+		world.createEntity() { // 1
+			CompA()
+		}
+		XCTAssert(world.isChanged == true)
+		world.createEntity() {
+		}
+		XCTAssert(world.isChanged == true)
+		world.resetIsChanged()
+		XCTAssert(world.isChanged == false)
+		world.createEntity() { // 1
+		}
+		XCTAssert(world.isChanged == false)
+		
+		world.createEntity() { // 1
+			CompA()
+		}
+		XCTAssert(world.isChanged == true)
+		
+		//
+		raaLog("")
+		raaLog("_______________________________")
+	}
+	
 	func testNormalAddingAndRemoving() throws {
 		let world = IDComponentPopulation()
 		for config in tstInitArray {

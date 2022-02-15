@@ -12,7 +12,13 @@ internal var unOptimizesMaxID:IDComponentPopulation.EntityID = IDComponentPopula
 
 public class IDComponentPopulation {
 	public typealias EntityID = UInt32
-	public private(set) var components: [IDComponent] = []
+	public private(set) var components: [IDComponent] = [] {
+		didSet {
+			isChanged = true
+		}
+	}
+	public fileprivate(set) var isChanged: Bool = false
+	func resetIsChanged() {isChanged = false}
 	private var currentLastID: EntityID {
 		get {
 			components.last?.id ?? 0
