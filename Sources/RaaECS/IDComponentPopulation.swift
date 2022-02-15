@@ -8,25 +8,26 @@
 //import Foundation
 //	//	//	//	//	//	//	//
 
-fileprivate let unOptimizesMaxID = UInt.max / 16
+internal var unOptimizesMaxID:IDComponentPopulation.EntityID = IDComponentPopulation.EntityID.max
 
 public class IDComponentPopulation {
-	public typealias EntityID = UInt
+	public typealias EntityID = UInt32
 	public private(set) var components: [IDComponent] = []
+	private var currentLastID: EntityID {
+		get {
+			components.last?.id ?? 0
+		}
+	}
 	
 	
-	internal func createNewEntityID() -> EntityID? {
-		sort()
-		let maxID:EntityID = getLastIDAfterSorting()
-		guard maxID > unOptimizesMaxID else {
-			return maxID + 1
+	fileprivate func createNewEntityID() -> EntityID? {
+		if currentLastID < unOptimizesMaxID {
+			return currentLastID + 1
+		}else{
+			performOptimization()
+			guard currentLastID < EntityID.max else {return nil}
+			return currentLastID + 1
 		}
-		runOptimizationAfterSorting()
-		let optimizedMaxID:EntityID = getLastIDAfterSorting()
-		if optimizedMaxID >= EntityID.max {
-			return nil
-		}
-		return optimizedMaxID + 1
 	}
 	
 	public func removeEntityWithComponent(_ aComponent: IDComponent ) {
@@ -48,30 +49,40 @@ public class IDComponentPopulation {
 			return false
 		}
 	}
+	public func removeComponents<ComponentType>(withType: ComponentType.Type) {
+		components.removeAll() { component in
+			return ( component as? ComponentType ) != nil
+		}
+	}
 	
-	
-	internal func sort() {
+	private func performOptimization() {
+		//print("performOptimization!!!!!!!!!!!!!!!!!!!!!!!!!")
+		cleanComponentsWithIncorrectID()
+		sort()
+		runOptimizationAfterSorting()
+	}
+	private func cleanComponentsWithIncorrectID() {
+		components.removeAll() { component in
+			return 0 == ( component.id ?? 0 )
+		}
+	}
+	private func sort() {
 		components.sort() {prev,next in
 			guard let prevID = prev.id else {return true}
 			guard let nextID = next.id else {return false}
 			return prevID < nextID
 		}
 	}
-	private func getLastIDAfterSorting() -> EntityID {
-		return components.last?.id ?? 0
-	}
 	private func runOptimizationAfterSorting() {
-		print("runOptimizationAfterSorting")
-		//		fatalError()
-		var currentID:EntityID = components.first?.id ?? 0
-		guard currentID > 0 else {return}
 		var currentOptimumID:EntityID = 1
+		var currentActualID:EntityID = components.first?.id ?? 0
+		guard currentActualID > 0 else {return}
 		for component in components {
-			if component.id == currentID {
+			if component.id == currentActualID {
 				component.id = currentOptimumID
 			}else{
-				currentID = component.id ?? 0
 				currentOptimumID += 1
+				currentActualID = component.id ?? 0
 				component.id = currentOptimumID
 			}
 		}
@@ -84,8 +95,9 @@ public class IDComponentPopulation {
 //	//	//	//	//	//	//	//
 
 extension IDComponentPopulation {
-	func addComponent( _ newComponent: IDComponent ) {
+	private func addComponent( _ newComponent: IDComponent ) {
 		guard newComponent.id != nil else {return}
+		guard newComponent.id != 0 else {return}
 		for component in components {
 			if newComponent.id == component.id {
 				if type(of: newComponent) == type(of: component) {
@@ -104,6 +116,9 @@ public extension IDComponentPopulation {
 	struct Builder {
 		public static func buildExpression(_ component: IDComponent) -> [IDComponent] {
 			return [component]
+		}
+		public static func buildExpression(_ component: [IDComponent]) -> [IDComponent] {
+			return component
 		}
 		public static func buildBlock(_ components: [IDComponent]...) -> [IDComponent] {
 			var result:[IDComponent] = []
