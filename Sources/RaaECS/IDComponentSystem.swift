@@ -10,8 +10,8 @@
 
 
 public class IDComponentSystem<ComponentType: IDComponent> {
-	typealias pseudoType = (()->ComponentType?)
-	fileprivate private(set) var systemComponents:[pseudoType] = []
+	public typealias pseudoType = (()->ComponentType?)
+	public private(set) var systemComponents:[pseudoType] = []
 	//
 	public func reBuildComponentList( from components: [IDComponent] ) {
 		systemComponents = []
