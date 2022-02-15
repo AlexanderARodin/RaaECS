@@ -8,32 +8,38 @@
 //import Foundation
 //	//	//	//	//	//	//	//
 
+public struct Weak<Type: AnyObject> {
+	private(set) weak var ref:Type?
+	public init(_ item: Type?) {
+		self.ref = item
+	}
+}
 
 public class IDComponentSystem<ComponentType: IDComponent> {
-	public typealias pseudoType = (()->ComponentType?)
-	public private(set) var systemComponents:[pseudoType] = []
+	public typealias WeakType = Weak<ComponentType>
+	public private(set) var systemComponents:[WeakType] = []
 	//
 	public func reBuildComponentList( from components: [IDComponent] ) {
 		systemComponents = []
 		for component in components {
 			if component.isValidID {
 				if let component = component as? ComponentType {
-					systemComponents.append({[weak component] in return component})
+					systemComponents.append(Weak(component))
 				}
 			}
 		}
 	}
 	
 	var count: Int {systemComponents.count}
-	subscript( _ index: Int ) -> ComponentType? {systemComponents[index]()}
-	public func findComponents( sameEntityIDWith another: IDComponent? ) -> [pseudoType] {
+	subscript( _ index: Int ) -> ComponentType? {systemComponents[index].ref}
+	public func findComponents( sameEntityIDWith another: IDComponent? ) -> [WeakType] {
 		guard let another = another else {
 			return []
 		}
-		var list:[pseudoType] = []
-		for component in systemComponents {
-			if another.isTheSameIDWith(component()) {
-				list.append(component)
+		var list:[WeakType] = []
+		for weakComponent in systemComponents {
+			if another.isTheSameIDWith(weakComponent.ref) {
+				list.append(weakComponent)
 			}
 		}
 		return list
