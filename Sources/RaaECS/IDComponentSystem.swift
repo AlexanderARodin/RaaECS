@@ -30,9 +30,17 @@ public class IDComponentSystem<ComponentType: IDComponent> {
 		}
 	}
 	
+	public init() {}
+}
+
+public extension IDComponentSystem {
 	var count: Int {systemComponents.count}
 	subscript( _ index: Int ) -> ComponentType? {systemComponents[index].ref}
-	public func findComponents( sameEntityIDWith another: IDComponent? ) -> [WeakType] {
+	
+	func findComponents( sameEntityIDWith another: WeakType ) -> [WeakType] {
+		return findComponents(sameEntityIDWith: another.ref)
+	}
+	func findComponents( sameEntityIDWith another: IDComponent? ) -> [WeakType] {
 		guard let another = another else {
 			return []
 		}
@@ -44,7 +52,4 @@ public class IDComponentSystem<ComponentType: IDComponent> {
 		}
 		return list
 	}
-	
-	public init() {}
 }
-
