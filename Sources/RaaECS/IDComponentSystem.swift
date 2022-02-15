@@ -35,5 +35,7 @@ public class IDComponentSystem<ComponentType: IDComponent> {
 		}
 		return list
 	}
+	
+	public init() {}
 }
 
