@@ -20,7 +20,7 @@ enum InitConfig {
 }
 let tstInitArray: [ InitConfig ] = [.CompBCompA, .onlyCompA, .noneComps, .doubledCompB, .CompACompB, .CompACompB, .CompBCompA, .doubledCompB, .onlyCompB]
 let comparArray:  [ String ] = ["A1:1", "A2:2", "A4:4", "A5:5", "A6:6", "A9:9", "A10:10", "A12:12", "A13:13", "A14:14"]
-let comparArrayOpt:  [ String ] = ["A1:1", "A2:2", "A4:3", "A5:4", "A6:5", "A9:6", "A10:7", "A12:8", "A13:9", "A14:10"]
+let comparArrayOpt:  [ String ] = ["A1:1", "A2:2", "A4:3", "A5:4", "A6:5", "A9:6", "A10:7", "A12:8", "A13:9", "A14:10", "B11:11"]
 
 
 class IDComponentTest: XCTestCase {
@@ -29,28 +29,28 @@ class IDComponentTest: XCTestCase {
 		let world = IDComponentPopulation()
 		XCTAssert(world.components.isEmpty)
 		
-		world.createEntity() {newEntityID in // 1
+		world.createEntity() { // 1
 		}
 		XCTAssert(world.components.isEmpty)
 		
-		world.createEntity() {newEntityID in // 1
-			CompA(withID: newEntityID)
+		world.createEntity() { // 1
+			CompA()
 		}
 		XCTAssert(world.components.count == 1)
 		XCTAssert((world.components[0] as! BaseComp).info == "A1:1", (world.components[0] as! BaseComp).info)
 		
-		world.createEntity() {newEntityID in // 2
+		world.createEntity() { // 2
 		}
 		XCTAssert(world.components.count == 1)
-		world.createEntity() {newEntityID in // 2
-			CompB(withID: newEntityID)
+		world.createEntity() { // 2
+			CompB()
 		}
 		XCTAssert(world.components.count == 2)
 		XCTAssert((world.components[0] as! BaseComp).info == "A1:1", (world.components[0] as! BaseComp).info)
 		XCTAssert((world.components[1] as! BaseComp).info == "B2:2", (world.components[1] as! BaseComp).info)
-		world.createEntity() {newEntityID in // 3
-			CompB(withID: newEntityID)
-			CompB(withID: newEntityID)
+		world.createEntity() { // 3
+			CompB()
+			CompB()
 		}
 		XCTAssert(world.components.count == 3)
 		XCTAssert((world.components[2] as! BaseComp).info == "B3:3", (world.components[2] as! BaseComp).info)
@@ -63,14 +63,43 @@ class IDComponentTest: XCTestCase {
 	func testNormalAddingAndRemoving() throws {
 		let world = IDComponentPopulation()
 		for config in tstInitArray {
-			world.createEntity() {newEntityID in
-				getSubArray( withID: newEntityID,  config: config )
+			world.createEntity() {
+				getSubArray( config: config )
 			}
 		}
 		XCTAssert(world.components.count == 12)
 		for config in tstInitArray {
-			world.createEntity() {newEntityID in
-				getSubArray( withID: newEntityID,  config: config )
+			world.createEntity() {
+				getSubArray( config: config )
+			}
+		}
+		XCTAssert(world.components.count == 24)
+		
+		world.removeComponents(withType: CompB.self)
+		XCTAssert(world.components.count == 10)
+		for i in 0..<10 {
+			let cmp = world.components[i] as? BaseComp
+			XCTAssertNotNil(cmp)
+			XCTAssert(cmp!.info == comparArray[i], "i: \(i)\t\(cmp!.info)")
+			raaLog(cmp!.info)
+		}
+		
+		//
+		raaLog("")
+		raaLog("_______________________________")
+	}
+	
+	func testOptimizing() throws {
+		let world = IDComponentPopulation()
+		for config in tstInitArray {
+			world.createEntity() {
+				getSubArray( config: config )
+			}
+		}
+		XCTAssert(world.components.count == 12)
+		for config in tstInitArray {
+			world.createEntity() {
+				getSubArray( config: config )
 			}
 		}
 		XCTAssert(world.components.count == 24)
@@ -85,9 +114,10 @@ class IDComponentTest: XCTestCase {
 		}
 		
 		unOptimizesMaxID = 1
-		world.createEntity() {newEntityID in
+		world.createEntity() {
+			CompB()
 		}
-		XCTAssert(world.components.count == 10)
+		XCTAssert(world.components.count == 11)
 		for i in 0..<10 {
 			let cmp = world.components[i] as? BaseComp
 			XCTAssertNotNil(cmp)
@@ -105,8 +135,8 @@ class IDComponentTest: XCTestCase {
 		self.measure {
 			for _ in 0..<100 {
 				for config in tstInitArray {
-					world.createEntity() {newEntityID in
-						getSubArray( withID: newEntityID,  config: config )
+					world.createEntity() {
+						getSubArray(config: config )
 					}
 				}
 			}
@@ -128,8 +158,8 @@ class IDComponentTest: XCTestCase {
 		self.measure {
 			for _ in 0..<100 {
 				for config in tstInitArray {
-					world.createEntity() {newEntityID in
-						getSubArray( withID: newEntityID,  config: config )
+					world.createEntity() {
+						getSubArray( config: config )
 					}
 				}
 			}
@@ -165,20 +195,20 @@ extension IDComponentTest {
 		raaLog("")
 	}
 	
-	func getSubArray( withID: IDComponent.EntityID, config: InitConfig ) -> [IDComponent] {
+	func getSubArray( config: InitConfig ) -> [IDComponent] {
 		switch config {
 		case .noneComps:
 			return []
 		case .onlyCompA:
-			return [CompA(withID: withID)]
+			return [CompA()]
 		case .onlyCompB:
-			return [CompB(withID: withID)]
+			return [CompB()]
 		case .doubledCompB:
-			return [CompB(withID: withID), CompB(withID: withID)]
+			return [CompB(), CompB()]
 		case .CompACompB:
-			return [CompA(withID: withID), CompB(withID: withID)]
+			return [CompA(), CompB()]
 		case .CompBCompA:
-			return [CompB(withID: withID), CompA(withID: withID)]
+			return [CompB(), CompA()]
 		}
 	}
 }
@@ -186,7 +216,15 @@ extension IDComponentTest {
 
 
 class BaseComp: IDComponent, DBGInfo {
-	let initID:EntityID
+	override func onChangeID(from oldID: IDComponent.EntityID?, to newID: IDComponent.EntityID?) {
+		if oldID == nil, let newID = newID, initID == 0 {
+			//raaLog(tag + "Ok-k-k..")
+			initID = newID
+		}else{
+			//raaLog(tag + "\t\(oldID) -> \(newID)\t!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+		}
+	}
+	var initID:EntityID = 0
 	let tag:String
 	var info:String {
 		get {
@@ -197,10 +235,9 @@ class BaseComp: IDComponent, DBGInfo {
 		}
 	}
 	//
-	init( withID: EntityID, withTag: String = "" ) {
-		self.initID = withID
+	init( withTag: String = "" ) {
 		self.tag = withTag
-		super.init( withID: withID)
+		super.init()
 		raaInitInfo("\(tag) - id\((id ?? 0))")
 	}
 	deinit {
@@ -211,26 +248,14 @@ class BaseComp: IDComponent, DBGInfo {
 
 class CompA: BaseComp {
 	//
-	override init( withID: EntityID, withTag: String = "" ) {
-		super.init( withID: withID, withTag: "A"+withTag )
+	override init( withTag: String = "" ) {
+		super.init( withTag: "A"+withTag )
 	}
 }
 class CompB: BaseComp {
 	//
-	override init( withID: EntityID, withTag: String = "" ) {
-		super.init( withID: withID, withTag: "B"+withTag  )
-	}
-}
-
-func printWorld(_ population: IDComponentPopulation) {
-	raaLog(">>>>>")
-	printList(components: population.components)
-	raaLog("_____")
-}
-
-func printList(components: [IDComponent]) {
-	for component in components {
-		raaLog("id:\(component.id) - \(component)")
+	override init( withTag: String = "" ) {
+		super.init( withTag: "B"+withTag  )
 	}
 }
 

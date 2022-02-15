@@ -95,16 +95,16 @@ public class IDComponentPopulation {
 //	//	//	//	//	//	//	//
 
 extension IDComponentPopulation {
-	private func addComponent( _ newComponent: IDComponent ) {
-		guard newComponent.id != nil else {return}
-		guard newComponent.id != 0 else {return}
+	private func addComponent( _ newComponent: IDComponent, toEntityID entityID: EntityID ) {
+		guard entityID != 0 else {return}
 		for component in components {
-			if newComponent.id == component.id {
+			if component.id == entityID {
 				if type(of: newComponent) == type(of: component) {
 					return
 				}
 			}
 		}
+		newComponent.id = entityID
 		components.append(newComponent)
 	}
 }
@@ -138,13 +138,12 @@ public extension IDComponentPopulation {
 		}
 	}
 	
-	func createEntity( @IDComponentPopulation.Builder _ call: (_ newEntityID:EntityID)->[IDComponent] ) {
+	func createEntity( @IDComponentPopulation.Builder _ call: ()->[IDComponent] ) {
+		let componentList = call()
+		guard !componentList.isEmpty else {return}
 		guard let entityID = createNewEntityID() else {return}
-		let componentList = call(entityID)
 		for component in componentList {
-			if component.id == entityID {
-				addComponent(component)
-			}
+			addComponent(component, toEntityID: entityID)
 		}
 	}
 	
@@ -172,10 +171,14 @@ public extension IDComponentPopulation {
 
 open class IDComponent {
 	public typealias EntityID = IDComponentPopulation.EntityID
-	internal fileprivate(set) var id: EntityID?
+	internal fileprivate(set) var id: EntityID? {
+		didSet {
+			onChangeID( from: oldValue, to: id)
+		}
+	}
+	internal func onChangeID( from oldID: EntityID?, to newID: EntityID? ) {}
 	
-	public init( withID: EntityID ) {
-		self.id = withID
+	public init() {
 	}
 }
 
