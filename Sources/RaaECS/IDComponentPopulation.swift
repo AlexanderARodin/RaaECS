@@ -146,6 +146,10 @@ public extension IDComponentPopulation {
 			addComponent(component, toEntityID: entityID)
 		}
 	}
+}
+
+
+public extension IDComponentPopulation {
 	
 	func getComponentsFromEntityWith( component aComponent: IDComponent ) -> [IDComponent] {
 		var result: [IDComponent] = []
@@ -165,7 +169,7 @@ public extension IDComponentPopulation {
 		}
 		return result
 	}
-
+	
 }
 
 
