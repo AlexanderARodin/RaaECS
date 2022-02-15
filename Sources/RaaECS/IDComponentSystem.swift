@@ -9,7 +9,7 @@
 //	//	//	//	//	//	//	//
 
 public struct Weak<Type: AnyObject> {
-	private(set) weak var ref:Type?
+	public private(set) weak var ref:Type?
 	public init(_ item: Type?) {
 		self.ref = item
 	}
