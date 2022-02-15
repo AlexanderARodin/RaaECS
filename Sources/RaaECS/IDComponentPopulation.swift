@@ -192,6 +192,12 @@ open class IDComponent {
 		}
 	}
 	internal func onChangeID( from oldID: EntityID?, to newID: EntityID? ) {}
+	internal func isTheSameIDWith( _ component: IDComponent? ) -> Bool {
+		guard let component = component else {
+			return false
+		}
+		return id == component.id
+	}
 	
 	public init() {
 	}

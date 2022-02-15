@@ -21,10 +21,49 @@ enum InitConfig {
 let tstInitArray: [ InitConfig ] = [.CompBCompA, .onlyCompA, .noneComps, .doubledCompB, .CompACompB, .CompACompB, .CompBCompA, .doubledCompB, .onlyCompB]
 let comparArray:  [ String ] = ["A1:1", "A2:2", "A4:4", "A5:5", "A6:6", "A9:9", "A10:10", "A12:12", "A13:13", "A14:14"]
 let comparArrayOpt:  [ String ] = ["A1:1", "A2:2", "A4:3", "A5:4", "A6:5", "A9:6", "A10:7", "A12:8", "A13:9", "A14:10", "B11:11"]
+let sysB_Array:  [ String ] = ["B1:1", "B3:3", "B4:4", "B5:5", "B6:6", "B7:7", "B8:8"]
 
 
 class IDComponentTest: XCTestCase {
 	//
+	func testComponentSystem() throws {
+		let world = IDComponentPopulation()
+		for config in tstInitArray {
+			world.createEntity() {
+				getSubArray( config: config )
+			}
+		}
+		let sysAB = IDComponentSystem<IDComponent>()
+		sysAB.reBuildComponentList( from: [] )
+		XCTAssert(sysAB.count == 0)
+		sysAB.reBuildComponentList( from: world.components )
+		XCTAssert(sysAB.count == 12)
+		
+		let sysA = IDComponentSystem<CompA>()
+		sysA.reBuildComponentList( from: world.components )
+		XCTAssert(sysA.count == 5)
+		
+		let sysB = IDComponentSystem<CompB>()
+		sysB.reBuildComponentList( from: world.components )
+		XCTAssert(sysB.count == 7)
+		for i in 0..<7 {
+			let cmp = sysB[i]
+			XCTAssertNotNil(cmp)
+			XCTAssert(cmp!.isValidID)
+			XCTAssert(cmp!.info == sysB_Array[i], "i: \(i)\t\(cmp!.info)")
+			raaLog(cmp!.info)
+		}
+		world.removeComponents(withType: AnyObject.self)
+		for i in 0..<7 {
+			let cmp = sysB[i]
+			XCTAssertNil(cmp)
+		}
+
+		//
+		raaLog("")
+		raaLog("_______________________________")
+	}
+	
 	func testBasicAdding() throws {
 		let world = IDComponentPopulation()
 		XCTAssert(world.components.isEmpty)
