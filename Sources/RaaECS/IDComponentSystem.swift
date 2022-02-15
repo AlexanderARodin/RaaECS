@@ -26,7 +26,7 @@ public class IDComponentSystem<ComponentType: IDComponent> {
 	
 	var count: Int {systemComponents.count}
 	subscript( _ index: Int ) -> ComponentType? {systemComponents[index]()}
-	func findComponents( sameEntityIDWith another: IDComponent ) -> [pseudoType] {
+	public func findComponents( sameEntityIDWith another: IDComponent ) -> [pseudoType] {
 		var list:[pseudoType] = []
 		for component in systemComponents {
 			if another.isTheSameIDWith(component()) {
