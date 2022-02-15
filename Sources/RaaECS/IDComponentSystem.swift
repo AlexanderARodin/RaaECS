@@ -37,6 +37,17 @@ public extension IDComponentSystem {
 	var count: Int {systemComponents.count}
 	subscript( _ index: Int ) -> ComponentType? {systemComponents[index].ref}
 	
+	func findFirstComponents( sameEntityIDWith another: IDComponent? ) -> WeakType? {
+		guard let another = another else {
+			return nil
+		}
+		for weakComponent in systemComponents {
+			if another.isTheSameIDWith(weakComponent.ref) {
+				return weakComponent
+			}
+		}
+		return nil
+	}
 	func findComponents( sameEntityIDWith another: IDComponent? ) -> [WeakType] {
 		guard let another = another else {
 			return []
