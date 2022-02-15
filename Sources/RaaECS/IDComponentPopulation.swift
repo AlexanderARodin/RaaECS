@@ -18,7 +18,7 @@ public class IDComponentPopulation {
 		}
 	}
 	public fileprivate(set) var isChanged: Bool = false
-	func resetIsChanged() {isChanged = false}
+	public func resetIsChanged() {isChanged = false}
 	private var currentLastID: EntityID {
 		get {
 			components.last?.id ?? 0
