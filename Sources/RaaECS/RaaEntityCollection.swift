@@ -59,16 +59,14 @@ public extension RaaEntityCollection {
 	
 	func removeAllEntities( where call: (_ entity: Entity ) -> Bool = {_ in true} ) {
 		entities.removeAll() { entity in
-			call(entity)
+			if entity.components.isEmpty {
+				return true
+			}else{
+				return call(entity)
+			}
 		}
 	}
 }
-
-
-
-
-
-
 
 
 
