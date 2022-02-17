@@ -14,6 +14,7 @@ public class RaaEntityCollection {
 	public typealias Component = Entity.Component
 	public fileprivate(set) var entities: [Entity] = []
 	
+	public init() {}
 }
 
 
