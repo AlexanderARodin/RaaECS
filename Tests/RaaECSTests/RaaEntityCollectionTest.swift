@@ -16,6 +16,7 @@ class RaaEntityCollectionTest: XCTestCase {
 	var population = RaaEntityCollection()
 	
 	func testAdding() throws {
+		population = RaaEntityCollection()
 		XCTAssert(population.entities.isEmpty)
 		population.createEntity() {
 			//
@@ -36,10 +37,38 @@ class RaaEntityCollectionTest: XCTestCase {
 		XCTAssert(subList1[1].component.name == "theSecond", "actual count: \(subList1[1].component.name)")
 		let subList2 = population.getEntityWithComponent(ofType: Localable.self)
 		XCTAssert(subList2.count == 1, "actual count: \(subList2.count)")
-
 	}
 	
+	func testRemoving() throws {
+		population = RaaEntityCollection()
+		XCTAssert(population.entities.isEmpty)
+		population.createEntity() {
+			Nameable("theFirst")
+		}
+		population.createEntity() {
+			Nameable("theSecond")
+			Localable()
+		}
+		population.createEntity() {
+			Nameable("theFirst")
+		}
+		population.createEntity() {
+			Nameable("theFirst")
+		}
+		population.createEntity() {
+			Nameable("theSecond")
+			Localable()
+		}
+		XCTAssert(population.entities.count == 5, "actual count: \(population.entities.count)")
+		population.removeAllEntities() {entity in
+			entity.findComponent(withType: Localable.self) != nil
+		}
+		XCTAssert(population.entities.count == 3, "actual count: \(population.entities.count)")
+		population.removeAllEntities()
+		XCTAssert(population.entities.count == 0, "actual count: \(population.entities.count)")
+	}
 	
+
 }
 
 

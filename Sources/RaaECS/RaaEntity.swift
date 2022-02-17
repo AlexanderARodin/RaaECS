@@ -21,13 +21,13 @@ public class RaaEntity {
 
 extension RaaEntity {
 	
-	internal func informComponents() {
+	func informComponents() {
 		for component in components {
 			component.hasChanged(self)
 		}
 	}
 	
-	public func addComponent(_ newComponent: Component) {
+	func addComponentSiletnly(_ newComponent: Component) {
 		for component in components {
 			if type(of: newComponent) == type(of: component) {
 				return
@@ -35,12 +35,25 @@ extension RaaEntity {
 		}
 		components.append(newComponent)
 	}
-	public func removeComponent<FilterType>( withType: FilterType.Type) {
+	func removeComponentSiletnly<FilterType>( withType: FilterType.Type) {
 		components.removeAll() { component in
 			component is FilterType
 		}
 	}
-	public func findComponent<FilterType>( withType: FilterType.Type) -> FilterType? {
+}
+	
+public extension RaaEntity {
+	
+	func addComponent(_ newComponent: Component) {
+		addComponentSiletnly(newComponent)
+		informComponents()
+	}
+	func removeComponent<FilterType>( withType: FilterType.Type) {
+		removeComponentSiletnly(withType: withType)
+		informComponents()
+	}
+	
+	func findComponent<FilterType>( withType: FilterType.Type) -> FilterType? {
 		for component in components {
 			if let component = component as? FilterType {
 				return component

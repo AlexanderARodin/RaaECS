@@ -56,7 +56,12 @@ public extension RaaEntityCollection {
 		entities.append(newEntity)
 		newEntity.informComponents()
 	}
-
+	
+	func removeAllEntities( where call: (_ entity: Entity ) -> Bool = {_ in true} ) {
+		entities.removeAll() { entity in
+			call(entity)
+		}
+	}
 }
 
 
