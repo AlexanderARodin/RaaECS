@@ -1,20 +1,33 @@
 //
 //  RaaEntity.swift
+//  
 //
-//
-//  Created by the Dragon on 11.02.2022.
+//  Created by the Dragon on 17.02.2022.
 //
 
-import CoreFoundation
+import CoreData
 
 //import Foundation
 //	//	//	//	//	//	//	//
 
 
 public class RaaEntity {
-	public private(set) var components:[Any] = []
+	public typealias Component = RaaComponent
+	public private(set) var components:[Component] = []
 	
-	public func addComponent(_ newComponent: Any) {
+	public init() {}
+}
+
+
+extension RaaEntity {
+	
+	internal func informComponents() {
+		for component in components {
+			component.hasChanged(self)
+		}
+	}
+	
+	public func addComponent(_ newComponent: Component) {
 		for component in components {
 			if type(of: newComponent) == type(of: component) {
 				return
@@ -22,88 +35,17 @@ public class RaaEntity {
 		}
 		components.append(newComponent)
 	}
-	public func removeComponent<ComponentType>( withType: ComponentType.Type) {
+	public func removeComponent<FilterType>( withType: FilterType.Type) {
 		components.removeAll() { component in
-			component is ComponentType
+			component is FilterType
 		}
 	}
-	public func findComponent<ComponentType>( withType: ComponentType.Type) -> ComponentType? {
+	public func findComponent<FilterType>( withType: FilterType.Type) -> FilterType? {
 		for component in components {
-			if let component = component as? ComponentType {
-				return component
-			}
-		}
-		return nil
-	}
-	
-	public init() {}
-}
-
-
-
-
-
-
-
-//extension RaaEntity: DBGInfo {
-//}
-
-public class OLD_RaaEntity {
-	public private(set) var components:[BaseRaaComponent] = [] {
-		didSet {
-			notifyComponents()
-		}
-	}
-	
-	private func notifyComponents() {
-		for component in components {
-			component.onComponentListChanged()
-		}
-	}
-	
-	init() {
-		//raaInitInfo()
-	}
-	deinit {
-		removeAllComponents()
-		//raaDEINITInfo()
-	}
-}
-
-
-extension OLD_RaaEntity {
-	func addComponent(_ newComponent: BaseRaaComponent ) {
-		guard newComponent.entity === self else {return}
-		func compareObjectTypes(_ a:Any, _ b:Any)->Bool {type(of: a) == type(of: b)}
-		if !components.contains(where: {component in compareObjectTypes(component, newComponent) }) {
-			components.append(newComponent)
-		}
-	}
-	func removeComponent<ComponentType>( withType: ComponentType.Type ) {
-		components.removeAll() {component in
-			if component is ComponentType {
-				return true
-			}else{
-				return false
-			}
-		}
-	}
-	func removeAllComponents() {
-		components.removeAll() {component in
-			return true
-		}
-	}
-}
-
-public extension OLD_RaaEntity {
-	func findComponent<ComponentType>( withType: ComponentType.Type ) -> BaseRaaComponent? {
-		for component in components {
-			if component is ComponentType {
+			if let component = component as? FilterType {
 				return component
 			}
 		}
 		return nil
 	}
 }
-
-

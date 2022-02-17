@@ -5,20 +5,12 @@
 //  Created by the Dragon on 11.02.2022.
 //
 
-import GameplayKit
+//import GameplayKit
 //	//	//	//	//	//	//	//
 
 
 //extension OLD_RaaEntityPopulation: DBGInfo {
 //}
-
-class EntityPopulation {
-	private(set) var entities: [RaaEntity] = []
-	
-	
-}
-
-
 
 
 
