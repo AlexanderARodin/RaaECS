@@ -15,13 +15,13 @@
 
 
 open class BaseRaaComponent {
-	public private(set) weak var entity:RaaEntity?
+	public private(set) weak var entity:OLD_RaaEntity?
 	//
 	
 	open func update( withDeltaTime deltaTime: Double ) {}
 	open func onComponentListChanged() {}
 
-	public init(forEntity:RaaEntity) {
+	public init(forEntity:OLD_RaaEntity) {
 		self.entity = forEntity
 		//raaInitInfo()
 	}

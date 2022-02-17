@@ -5,15 +5,50 @@
 //  Created by the Dragon on 11.02.2022.
 //
 
+import CoreFoundation
+
 //import Foundation
 //	//	//	//	//	//	//	//
+
+
+public class RaaEntity {
+	public private(set) var components:[Any] = []
+	
+	public func addComponent(_ newComponent: Any) {
+		for component in components {
+			if type(of: newComponent) == type(of: component) {
+				return
+			}
+		}
+		components.append(newComponent)
+	}
+	public func removeComponent<ComponentType>( withType: ComponentType.Type) {
+		components.removeAll() { component in
+			component is ComponentType
+		}
+	}
+	public func findComponent<ComponentType>( withType: ComponentType.Type) -> ComponentType? {
+		for component in components {
+			if let component = component as? ComponentType {
+				return component
+			}
+		}
+		return nil
+	}
+	
+	public init() {}
+}
+
+
+
+
+
 
 
 //extension RaaEntity: DBGInfo {
 //}
 
-
-public class RaaEntity {
+public class OLD_RaaEntity {
 	public private(set) var components:[BaseRaaComponent] = [] {
 		didSet {
 			notifyComponents()
@@ -36,7 +71,7 @@ public class RaaEntity {
 }
 
 
-extension RaaEntity {
+extension OLD_RaaEntity {
 	func addComponent(_ newComponent: BaseRaaComponent ) {
 		guard newComponent.entity === self else {return}
 		func compareObjectTypes(_ a:Any, _ b:Any)->Bool {type(of: a) == type(of: b)}
@@ -60,7 +95,7 @@ extension RaaEntity {
 	}
 }
 
-public extension RaaEntity {
+public extension OLD_RaaEntity {
 	func findComponent<ComponentType>( withType: ComponentType.Type ) -> BaseRaaComponent? {
 		for component in components {
 			if component is ComponentType {

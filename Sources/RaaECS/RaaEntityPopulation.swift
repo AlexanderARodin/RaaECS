@@ -5,17 +5,25 @@
 //  Created by the Dragon on 11.02.2022.
 //
 
-//import Foundation
+import GameplayKit
 //	//	//	//	//	//	//	//
 
 
-//extension RaaEntityPopulation: DBGInfo {
+//extension OLD_RaaEntityPopulation: DBGInfo {
 //}
 
+class EntityPopulation {
+	private(set) var entities: [RaaEntity] = []
+	
+	
+}
 
 
-public class RaaEntityPopulation {
-	public private(set) var entities:[RaaEntity] = []
+
+
+
+public class OLD_RaaEntityPopulation {
+	public private(set) var entities:[OLD_RaaEntity] = []
 	
 	
 	public init() {
@@ -37,7 +45,7 @@ public class RaaEntityPopulation {
 			entity.components.isEmpty
 		}
 	}
-	public func removeEntity(_ anEntity:RaaEntity) {
+	public func removeEntity(_ anEntity:OLD_RaaEntity) {
 		entities.removeAll() {entity in
 			if entity === anEntity {
 				entity.removeAllComponents()
@@ -60,9 +68,9 @@ public struct ComponentSequence {
 	}
 }
 
-public extension RaaEntityPopulation {
-	func createEntityFromComponents( @ComponentSequence _ call: (_ newEntity:RaaEntity)->[BaseRaaComponent] ) {
-		let entity:RaaEntity = RaaEntity()
+public extension OLD_RaaEntityPopulation {
+	func createEntityFromComponents( @ComponentSequence _ call: (_ newEntity:OLD_RaaEntity)->[BaseRaaComponent] ) {
+		let entity:OLD_RaaEntity = OLD_RaaEntity()
 		let componentList = call(entity)
 		for component in componentList {
 			entity.addComponent(component)
