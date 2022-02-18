@@ -11,7 +11,7 @@ import XCTest
 //	//	//	//	//	//	//	/
 
 
-class RaaEntityTest: XCTestCase {
+final class RaaEntityTest: XCTestCase {
 	
 	func testAdding() throws {
 		let ent = RaaEntity()

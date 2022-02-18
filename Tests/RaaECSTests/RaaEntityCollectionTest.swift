@@ -12,7 +12,7 @@ import CoreGraphics
 //	//	//	//	//	//	//	/
 
 
-class RaaEntityCollectionTest: XCTestCase {
+final class RaaEntityCollectionTest: XCTestCase {
 	var population = RaaEntityCollection()
 	
 	func testAdding() throws {

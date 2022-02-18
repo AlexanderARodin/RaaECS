@@ -12,7 +12,7 @@
 public protocol RaaComponent: AnyObject {
 	func hasChanged( _ entity: RaaEntityCollection.Entity )
 }
-extension RaaComponent {
+public extension RaaComponent {
 	func hasChanged( _ entity: RaaEntityCollection.Entity ) {}
 }
 
