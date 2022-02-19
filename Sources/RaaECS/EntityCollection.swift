@@ -9,8 +9,8 @@
 //	//	//	//	//	//	//	//
 
 
-public class RaaEntityCollection {
-	public typealias Entity = RaaEntity
+public class EntityCollection {
+	public typealias Entity = RaaECS.Entity
 	public typealias Component = Entity.Component
 	public fileprivate(set) var entities: [Entity] = []
 	
@@ -19,7 +19,7 @@ public class RaaEntityCollection {
 
 
 
-public extension RaaEntityCollection {
+public extension EntityCollection {
 	@resultBuilder
 	struct EntityBuilder {
 		public static func buildExpression(_ component: Component) -> [Component] {
@@ -46,10 +46,10 @@ public extension RaaEntityCollection {
 		}
 	}
 	
-	func createEntity( @RaaEntityCollection.EntityBuilder _ call: ()->[Component] ) {
+	func createEntity( @EntityCollection.EntityBuilder _ call: ()->[Component] ) {
 		let componentList = call()
 		guard !componentList.isEmpty else {return}
-		let newEntity = RaaEntity()
+		let newEntity = Entity()
 		for component in componentList {
 			newEntity.addComponent(component)
 		}
@@ -72,10 +72,10 @@ public extension RaaEntityCollection {
 
 
 
-public extension RaaEntityCollection {
+public extension EntityCollection {
 	
-	func getEntityWithComponent<PrimaryType: Component>(ofType: PrimaryType.Type) -> [(entity: RaaEntity, component: PrimaryType)] {
-		var subList:[(entity: RaaEntity, component: PrimaryType)] = []
+	func getEntityWithComponent<PrimaryType: Component>(ofType: PrimaryType.Type) -> [(entity: Entity, component: PrimaryType)] {
+		var subList:[(entity: Entity, component: PrimaryType)] = []
 		for entity in entities {
 			if let component = entity.findComponent(withType: ofType) {
 				subList.append( (entity, component) )
@@ -84,8 +84,8 @@ public extension RaaEntityCollection {
 		return subList
 	}
 	
-	func getEntityWithComponents<PrimaryType:Component, SecondaryType:Component>(primaryType: PrimaryType.Type, secondaryType: SecondaryType.Type) -> [(entity: RaaEntity, primary: PrimaryType, secondary: SecondaryType)] {
-		var subList:[(entity: RaaEntity, primary: PrimaryType, secondary: SecondaryType)] = []
+	func getEntityWithComponents<PrimaryType:Component, SecondaryType:Component>(primaryType: PrimaryType.Type, secondaryType: SecondaryType.Type) -> [(entity: Entity, primary: PrimaryType, secondary: SecondaryType)] {
+		var subList:[(entity: Entity, primary: PrimaryType, secondary: SecondaryType)] = []
 		for entity in entities {
 			if let primary = entity.findComponent(withType: primaryType) {
 				if let secondary = entity.findComponent(withType: secondaryType) {

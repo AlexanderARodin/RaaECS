@@ -1,5 +1,5 @@
 //
-//  RaaEntity.swift
+//  Entity.swift
 //  
 //
 //  Created by the Dragon on 17.02.2022.
@@ -10,15 +10,15 @@
 //	//	//	//	//	//	//	//
 
 
-public class RaaEntity {
-	public typealias Component = RaaComponent
+public class Entity {
+	public typealias Component = ComponentProtocol
 	public private(set) var components:[Component] = []
 	
 	public init() {}
 }
 
 
-extension RaaEntity {
+extension Entity {
 	
 	func informComponents() {
 		for component in components {
@@ -40,8 +40,8 @@ extension RaaEntity {
 		}
 	}
 }
-	
-public extension RaaEntity {
+
+public extension Entity {
 	
 	func addComponent(_ newComponent: Component) {
 		addComponentSiletnly(newComponent)

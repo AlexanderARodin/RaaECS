@@ -1,5 +1,5 @@
 //
-//  RaaEntityCollectionTest.swift
+//  EntityCollectionTest.swift
 //  
 //
 //  Created by the Dragon on 17.02.2022.
@@ -12,11 +12,11 @@ import CoreGraphics
 //	//	//	//	//	//	//	/
 
 
-final class RaaEntityCollectionTest: XCTestCase {
-	var population = RaaEntityCollection()
+final class EntityCollectionTest: XCTestCase {
+	var population = EntityCollection()
 	
 	func testAdding() throws {
-		population = RaaEntityCollection()
+		population = EntityCollection()
 		XCTAssert(population.entities.isEmpty)
 		population.createEntity() {
 			//
@@ -40,7 +40,7 @@ final class RaaEntityCollectionTest: XCTestCase {
 	}
 	
 	func testRemoving() throws {
-		population = RaaEntityCollection()
+		population = EntityCollection()
 		XCTAssert(population.entities.isEmpty)
 		population.createEntity() {
 			Nameable("theFirst")
@@ -68,16 +68,16 @@ final class RaaEntityCollectionTest: XCTestCase {
 		XCTAssert(population.entities.count == 0, "actual count: \(population.entities.count)")
 	}
 	
-
+	
 }
 
 
-extension RaaEntityCollectionTest {
+extension EntityCollectionTest {
 	override func setUpWithError() throws {
 		suppressLogs = false
 		raaLog("")
 		raaLog("---->")
-		population = RaaEntityCollection()
+		population = EntityCollection()
 	}
 	override func tearDownWithError() throws {
 		suppressLogs = false
@@ -87,11 +87,11 @@ extension RaaEntityCollectionTest {
 }
 
 
-class Localable: RaaComponent {
+class Localable: ComponentProtocol {
 	var position: CGPoint = .zero
 }
 
-class Nameable: RaaComponent {
+class Nameable: ComponentProtocol {
 	var name:String
 	init(_ name:String) { self.name = name }
 }

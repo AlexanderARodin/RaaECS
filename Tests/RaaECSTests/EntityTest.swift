@@ -1,5 +1,5 @@
 //
-//  RaaEntityTest.swift
+//  EntityTest.swift
 //  
 //
 //  Created by the Dragon on 17.02.2022.
@@ -11,10 +11,10 @@ import XCTest
 //	//	//	//	//	//	//	/
 
 
-final class RaaEntityTest: XCTestCase {
+final class EntityTest: XCTestCase {
 	
 	func testAdding() throws {
-		let ent = RaaEntity()
+		let ent = Entity()
 		XCTAssert(ent.components.isEmpty)
 		ent.addComponent(pseudoClass(3))
 		XCTAssert(ent.components.count == 1, "actual count: \(ent.components.count)")
@@ -25,7 +25,7 @@ final class RaaEntityTest: XCTestCase {
 	}
 	
 	func testRemoving() throws {
-		let ent = RaaEntity()
+		let ent = Entity()
 		ent.addComponent(pseudoClass(3))
 		ent.addComponent(pseudoClass("8"))
 		XCTAssert(ent.components.count == 2, "actual count: \(ent.components.count)")
@@ -35,7 +35,7 @@ final class RaaEntityTest: XCTestCase {
 		XCTAssert(ent.components.count == 1, "actual count: \(ent.components.count)")
 	}
 	func testFinding() throws {
-		let ent = RaaEntity()
+		let ent = Entity()
 		ent.addComponent(pseudoClass(3))
 		ent.addComponent(pseudoClass("someText2"))
 		ent.addComponent(pseudoClass(3.3))
@@ -47,7 +47,7 @@ final class RaaEntityTest: XCTestCase {
 	}
 	
 	func testChanging() throws {
-		let ent = RaaEntity()
+		let ent = Entity()
 		ent.addComponent(pseudoClass(3))
 		ent.addComponent(pseudoClass("someText2"))
 		ent.addComponent(pseudoClass(3.3))
@@ -61,7 +61,7 @@ final class RaaEntityTest: XCTestCase {
 }
 
 
-extension RaaEntityTest {
+extension EntityTest {
 	override func setUpWithError() throws {
 		suppressLogs = false
 		raaLog("")
@@ -74,7 +74,7 @@ extension RaaEntityTest {
 	}
 }
 
-class pseudoClass<T>: RaaComponent {
+class pseudoClass<T>: ComponentProtocol {
 	var value:T
 	init(_ v: T) {
 		self.value = v
